@@ -1,20 +1,22 @@
 import Multiselect from 'multiselect-react-dropdown';
 import PropTypes from 'prop-types'
 import React, { Component, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { InputActionMeta } from 'react-select';
 import Select from 'react-select/dist/declarations/src/Select';
-import apiService from '../../service/api.service';
-import apis from '../../service/api.service';
+import apiService from '../../../service/api.service';
+import apis from '../../../service/api.service';
 // import  withRouter from "react-router";
 
 
-function Forms() {
+function AddForm() {
+   let userData :any ; 
+   userData = localStorage.getItem('userData')
    let slectedItem:any
    let userImage:any;
     const [list, setlist] = useState<any>({
         username: '',
-        phone: '',
+        caption: '',
         email: '',
         data: [],
         userImage: {}
@@ -24,20 +26,16 @@ function Forms() {
     let selectedOption: any[] = [];
     let token = localStorage.getItem("token")
     function getByid(id: any) {
-        apiService.apis.get('/api/user/' + id, {
-            headers: {
-                'Authorization': `Basic ${token}`
-            }
-        }).then(res => {
+        apiService.apis.post('/api/feed/' + id).then(res => {
             console.log("dafsdfa", res.data);
             data = res.data
             // list.username= data.userName
-            // list.phone= data.phone 
+            // list.caption= data.caption 
             // list.email= data.email
             // list.data = data.data   
             setlist({  
             username: data.userName,
-            phone:  data.phone,
+            caption:  data.caption,
             email: data.email,
             data: data.data,
             userImage:{}
@@ -48,9 +46,9 @@ function Forms() {
             // setlist({ restoLists: res.data.data })
         })
     }
-
+    let userinfo:any;
     useEffect(() => {
-        if (id != '') {
+        if (id != '' && !id) {
             getByid(id);
         }
     }, []);
@@ -75,17 +73,20 @@ function Forms() {
         let arr:any = JSON.stringify(selectedItem);
         slectedItem = arr 
     }
-
+    let nav = useNavigate()
+    
     function submitval() {
+        // userinfo = JSON.parse(localStorage.getItem('userData'));
+        let username = JSON.parse(userData).username;
+        let _id =  JSON.parse(userData)._id;
         const formData = new FormData();
-        formData.append("userImage", list.userImage);
-        formData.set("userName", list.username);
-        formData.set("phone", list.phone);
-        formData.set("email", list.email);
-        formData.set("gender", "m");
-        formData.set("data", slectedItem);
+        formData.append("feedpost", list.userImage);
+        formData.set("username", username);
+        formData.set("caption", list.caption);
+        formData.set("userId",_id);
+        debugger
         if (id) {
-            apis.apis.put('/api/user/'+id, formData, {
+            apis.apis.put('/api/feed/'+id, formData, {
                 headers: {
                     'Authorization': `Basic ${token}`
                 }}).then(res => {
@@ -96,11 +97,15 @@ function Forms() {
             })
         } else {
             console.log(list);
-            apis.apis.post('/api/user/', formData).then(res => {
+            apis.apis.post('/api/feed/', formData, {
+                headers: {
+                    'Authorization': `Basic ${token}`
+                }}).then(res => {
                 console.log('response', res);
             })
 
         }
+        nav('/')
     }
    
 
@@ -120,27 +125,27 @@ function Forms() {
       
     
         <div className="container">
-            <div className="mb-3">
+            {/* <div className="mb-3">
                 <label htmlFor="text" className="form-label"></label>
                 <input type="text" value={list.username} name="username" id="" onChange={getform} className="form-control" placeholder="" aria-describedby="helpId" />
                 <small id="helpId" className="text-muted">username</small>
-            </div>
+            </div> */}
             <div className="mb-3">
                 <label htmlFor="text" className="form-label"></label>
-                <input type="text" value={list.phone} name="phone" id="" onChange={getform} className="form-control" placeholder="" aria-describedby="helpId" />
-                <small id="helpId" className="text-muted">Phone no</small>
+                <input type="text" value={list.caption} name="caption" id="" onChange={getform} className="form-control" placeholder="" aria-describedby="helpId" />
+                <small id="helpId" className="text-muted">caption</small>
             </div>
-            <div className="mb-3">
+            {/* <div className="mb-3">
                 <label htmlFor="text" className="form-label"></label>
                 <input type="text" value={list.email} name="email" id="" onChange={getform} className="form-control" placeholder="" aria-describedby="helpId" />
                 <small id="helpId" className="text-muted">email</small>
-            </div>
+            </div> */}
             <div className="mb-3">
                 <label htmlFor="pass" className="form-label"></label>
                 <input type="file" name="userImage" id="" onChange={filehendal} className="form-control" placeholder="" aria-describedby="helpId" />
                 <small id="helpId" className="text-muted">image</small>
             </div>
-            <Multiselect
+            {/* <Multiselect
 
                 placeholder={'Choose modes'}
                 // options={['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']}
@@ -158,7 +163,7 @@ function Forms() {
                 selectedValues={selectedOption}
                 disable={false}
                 style={{ marginTop: '2rem' }}
-            />
+            /> */}
             <button className='btn btn-primary m-5' type="submit" onClick={submitval}>
                 Submit
             </button>
@@ -168,4 +173,4 @@ function Forms() {
 
 }
 
-export default Forms
+export default AddForm

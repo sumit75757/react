@@ -1,0 +1,12 @@
+.card{
+    width: 30rem;
+}
+.card {
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
+}
+.row {
+    display: flex;
+    align-items: center;
+  }
