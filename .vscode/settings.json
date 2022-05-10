@@ -1,4 +1,7 @@
+
 {
-    "csharp.format.enable": false,
-    "java.autobuild.enabled": false
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#594b79",
+        "statusBar.background": "#333"
+      }
 }

@@ -55,11 +55,12 @@ function Navbarr() {
             <li className="nav-item ">
               <NavLink className="nav-link" to="/form">Form</NavLink>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">Pricing</a>
+            <li className="nav-item ">
+              <NavLink className="nav-link" to="/chat">Chat</NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">About</a>
+            <NavLink className="nav-link" to="/redux">redux</NavLink>
+
             </li>
           </ul>
           <ul className="navbar-nav d-flex flex-row me-1">

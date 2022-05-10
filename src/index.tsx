@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
- import axios from "axios";
-
+ import {createStore} from "redux";
+ import { Provider } from "react-redux";
+ import  reduser from "./component/redux/reduser/index";
+const stores = createStore<any,any,any,any>(reduser)
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={stores} >
     <App/>
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 
